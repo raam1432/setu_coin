@@ -1,0 +1,9 @@
+Django>=4.2
+gunicorn
+psycopg2-binary
+whitenoise
+python-decouple
+django-browser-reload
+django-tailwind
+django-widget-tweaks
+requests
