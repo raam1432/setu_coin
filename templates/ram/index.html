@@ -1,0 +1,22 @@
+{% extends 'ram/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+  <div class="card">
+    <h2>Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {% if form.errors %}
+        <ul class="msg error">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+  </div>
+{% endblock %}

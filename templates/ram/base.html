@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Setu Coin{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Setu Coin</h1>
+    {% if user.is_authenticated %}
+      {% with wallet=user.wallet %}
+        <p>Welcome, {{ user.username }} | Balance: {{ wallet.balance }} SC | <a href="{% url 'logout' %}">Logout</a></p>
+      {% endwith %}
+    {% endif %}
+  </header>
+  <main>
+    {% if messages %}
+      {% for message in messages %}
+        <p class="msg {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

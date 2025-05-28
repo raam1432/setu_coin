@@ -1,0 +1,30 @@
+{% extends 'ram/base.html' %}
+{% block title %}Wallet{% endblock %}
+{% block content %}
+  <div class="card">
+    <h2>Wallet Balance: {{ wallet.balance }} SC</h2>
+  </div>
+  <div class="card">
+    <h2>Transfer Coins</h2>
+    <form method="post" action="{% url 'transfer' %}">
+      {% csrf_token %}
+      {{ transfer_form.as_p }}
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Transaction History</h2>
+    {% for tx in transactions %}
+      <p>
+        {{ tx.timestamp|date:"Y-m-d H:i" }} —
+        {% if tx.sender == user %}
+          Sent {{ tx.amount }} to {{ tx.recipient.username }}
+        {% else %}
+          Received {{ tx.amount }} from {{ tx.sender.username }}
+        {% endif %}
+      </p>
+    {% empty %}
+      <p>No transactions yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
