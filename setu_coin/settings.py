@@ -1,10 +1,3 @@
-MIDDLEWARE = [
-    'block_middleware.block_suspicious.BlockSuspiciousPathsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    ...
-]
-
-
 from pathlib import Path
 import os
 
@@ -23,6 +16,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'setu_coin',  # तुमचा custom app इथे add करा
 ]
 
 MIDDLEWARE = [
@@ -53,7 +48,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'setu_coin.wsgi:application'
+WSGI_APPLICATION = 'setu_coin.wsgi.application'
 
 DATABASES = {
     'default': {
