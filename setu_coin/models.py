@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # वॉलेट मॉडेल - प्रत्येक यूजरसाठी एक वॉलेट
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    balance = models.PositiveIntegerField(default=100)  # सुरुवातीला 100 SETU coins
+    balance = models.PositiveIntegerField(default=1)  # सुरुवातीला 100 SETU coins
 
     def _str_(self):
         return f"{self.user.username} - {self.balance} SETU"
