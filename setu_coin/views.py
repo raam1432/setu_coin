@@ -4,8 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction
-
-# Assuming Wallet model with 'user' OneToOneField and 'balance' field exists
 from .models import Wallet
 
 @login_required
@@ -20,15 +18,15 @@ def register_view(request):
         password2 = request.POST.get('password2')
 
         if not username or not password or not password2:
-            messages.error(request, "All fields are required.")
+            messages.error(request, "सर्व फील्ड भरा.")
         elif password != password2:
-            messages.error(request, "Passwords do not match.")
+            messages.error(request, "पासवर्ड जुळत नाही.")
         elif User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
+            messages.error(request, "हा Username आधीच आहे.")
         else:
             user = User.objects.create_user(username=username, password=password)
-            Wallet.objects.create(user=user, balance=100)  # Initial coin balance
-            messages.success(request, "Registration successful. Please log in.")
+            Wallet.objects.create(user=user, balance=100)  # सुरुवातीला १०० SETU coins
+            messages.success(request, "नोंदणी यशस्वी. कृपया लॉगिन करा.")
             return redirect('login')
 
     return render(request, 'register.html')
@@ -42,7 +40,7 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "चूक Username किंवा Password.")
     return render(request, 'login.html')
 
 @login_required
@@ -63,42 +61,40 @@ def transfer_view(request):
         amount_str = request.POST.get('amount')
 
         if not recipient_username or not amount_str:
-            messages.error(request, "Please fill all fields.")
+            messages.error(request, "सर्व फील्ड भरा.")
             return redirect('transfer')
 
         try:
             amount = int(amount_str)
             if amount <= 0:
-                messages.error(request, "Amount must be positive.")
+                messages.error(request, "रक्कम सकारात्मक असावी.")
                 return redirect('transfer')
         except ValueError:
-            messages.error(request, "Invalid amount.")
+            messages.error(request, "अवैध रक्कम.")
             return redirect('transfer')
 
         if recipient_username == request.user.username:
-            messages.error(request, "You cannot transfer coins to yourself.")
+            messages.error(request, "स्वतःला Coin ट्रान्सफर करू शकत नाही.")
             return redirect('transfer')
 
         recipient = User.objects.filter(username=recipient_username).first()
         if not recipient:
-            messages.error(request, "Recipient does not exist.")
+            messages.error(request, "प्राप्तकर्ता अस्तित्वात नाही.")
             return redirect('transfer')
 
         sender_wallet = get_object_or_404(Wallet, user=request.user)
         recipient_wallet = get_object_or_404(Wallet, user=recipient)
 
         if sender_wallet.balance < amount:
-            messages.error(request, "Insufficient balance.")
+            messages.error(request, "Coin पुरेसे नाहीत.")
             return redirect('transfer')
 
-        # Deduct and add coins atomically
         sender_wallet.balance -= amount
         recipient_wallet.balance += amount
         sender_wallet.save()
         recipient_wallet.save()
 
-        messages.success(request, f"Successfully transferred {amount} SETU coins to {recipient_username}.")
+        messages.success(request, f"{amount} SETU coins {recipient_username} यांना ट्रान्सफर झाले.")
         return redirect('wallet')
 
     return render(request, 'transfer.html')
-
