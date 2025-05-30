@@ -9,7 +9,7 @@ from .models import Wallet
 @login_required
 def home(request):
     wallet = getattr(request.user, 'wallet', None)
-    return render(request, 'home.html', {'wallet': wallet})
+    return render(request, 'ram/home.html', {'wallet': wallet})
 
 def register_view(request):
     if request.method == 'POST':
@@ -29,7 +29,7 @@ def register_view(request):
             messages.success(request, "नोंदणी यशस्वी. कृपया लॉगिन करा.")
             return redirect('login')
 
-    return render(request, 'register.html')
+    return render(request, 'ram/register.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -41,7 +41,7 @@ def login_view(request):
             return redirect('home')
         else:
             messages.error(request, "चूक Username किंवा Password.")
-    return render(request, 'login.html')
+    return render(request, 'ram/login.html')
 
 @login_required
 def logout_view(request):
@@ -51,7 +51,7 @@ def logout_view(request):
 @login_required
 def wallet_view(request):
     wallet = get_object_or_404(Wallet, user=request.user)
-    return render(request, 'wallet.html', {'wallet': wallet})
+    return render(request, 'ram/wallet.html', {'wallet': wallet})
 
 @login_required
 @transaction.atomic
@@ -97,4 +97,4 @@ def transfer_view(request):
         messages.success(request, f"{amount} SETU coins {recipient_username} यांना ट्रान्सफर झाले.")
         return redirect('wallet')
 
-    return render(request, 'transfer.html')
+    return render(request, 'ram/transfer.html')
