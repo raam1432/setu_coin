@@ -1,13 +1,17 @@
 {% extends 'ram/base.html' %}
 {% block title %}Register{% endblock %}
+
 {% block content %}
-  <div class="card">
-    <h2>Create Account</h2>
-    <form method="post">
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-orange-600">Create your RAAM SETU Account</h2>
+    
+    <form method="post" class="space-y-4">
       {% csrf_token %}
       {{ form.as_p }}
+      
       {% if form.errors %}
-        <ul class="msg error">
+        <ul class="text-red-600 text-sm space-y-1">
           {% for field in form %}
             {% for error in field.errors %}
               <li>{{ error }}</li>
@@ -15,8 +19,68 @@
           {% endfor %}
         </ul>
       {% endif %}
-      <button type="submit">Register</button>
+      
+      <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition">
+        Register
+      </button>
     </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+
+    <p class="mt-4 text-center text-sm">
+      Already have an account?
+      <a href="{% url 'login' %}" class="text-orange-600 hover:underline">Login here</a>
+    </p>
   </div>
+</div>
 {% endblock %}
+body {
+  background-color: #f7fafc;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  max-width: 400px;
+  margin: 5rem auto;
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  color: #ea580c;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.card form p {
+  margin-bottom: 1rem;
+}
+
+.card input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  margin-top: 0.25rem;
+}
+
+.card button {
+  width: 100%;
+  background-color: #f97316;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #ea580c;
+}
+
+.card .msg.error {
+  color: red;
+  font-size: 0.9rem;
+}
