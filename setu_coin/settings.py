@@ -1,3 +1,10 @@
+MIDDLEWARE = [
+    'block_middleware.block_suspicious.BlockSuspiciousPathsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    ...
+]
+
+
 from pathlib import Path
 import os
 
