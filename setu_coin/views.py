@@ -11,25 +11,6 @@ def home(request):
     wallet = getattr(request.user, 'wallet', None)
     return render(request, 'ram/home.html', {'wallet': wallet})
 
-def register_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        password2 = request.POST.get('password2')
-
-        if not username or not password or not password2:
-            messages.error(request, "सर्व फील्ड भरा.")
-        elif password != password2:
-            messages.error(request, "पासवर्ड जुळत नाही.")
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, "हा Username आधीच आहे.")
-        else:
-            user = User.objects.create_user(username=username, password=password)
-            Wallet.objects.create(user=user, balance=100)  # सुरुवातीला १०० SETU coins
-            messages.success(request, "नोंदणी यशस्वी. कृपया लॉगिन करा.")
-            return redirect('login')
-
-    return render(request, 'ram/register.html')
 
 def login_view(request):
     if request.method == 'POST':
